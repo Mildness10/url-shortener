@@ -1,4 +1,7 @@
 {% load static %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -6,31 +9,45 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>URL Shortener</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!--<style>
+        body{
+            padding-top: 5rem;
+        }
+        .container{
+            max-width:800px;
+        }
+    </style>-->
   </head>
   <body>
-    <h1>URL Shortener</h1>
+    <div class="container">
+        <h1>URL Shortener</h1>
 
-    <form method="post">
-      {% csrf_token %}
-      <label for="original_url">Enter URL:</label>
-      <input type="url" name="original_url" required />
-      <button type="submit">Shorten</button>
-    </form>
+        <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">Shorten</button>
+        <!--<label for="original_url">Enter URL:</label>
+        <input type="url" name="original_url" required />
+        <button type="submit">Shorten</button>-->
+        </form>
 
-    <h2>Shortened URLs:</h2>
-    <ul>
-      {% for url in shortened_urls %}
-      <li>
-        <a href="{{ url.original_url }}">{{ url.original_url }}</a>
-        (<a href="{{ url.short_key }}">Short Link</a>)
-        {% if url.qr_code %}
+        <h2>Shortened URLs:</h2>
+        <ul>
+        {% for url in shortened_urls %}
+        <li>
+            <a href="{{ url.original_url }}">{{ url.original_url }}</a>
+            (<a href="{{ url.short_key }}">Short Link</a>) {% if url.qr_code %}
             <img src="{{ url.qr_code.url }}" alt="QR Code" />
-        {% else %}
+            {% else %}
             <p>image doesn't exist</p>
-        {% endif %}
-      </li>
-      {% endfor %}
-      
-    </ul>
+            {% endif %}
+        </li>
+        {% endfor %}
+        </ul>
+    <div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.2/js/bootstrap.min.js"></script>
   </body>
 </html>

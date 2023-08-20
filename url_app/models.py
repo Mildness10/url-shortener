@@ -5,7 +5,7 @@ from django.core.files import File
 
 class ShortenURL(models.Model):
     original_url = models.URLField()
-    short_key = models.CharField(max_length=10, unique=True)
+    short_key = models.CharField(max_length=30, unique=True)
     click_count = models.PositiveBigIntegerField(default = 0)
     qr_code = models.ImageField(upload_to='qrcodes/', blank=True, null=True)
     creation_date = models.DateTimeField(auto_now_add=True)

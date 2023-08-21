@@ -18,7 +18,7 @@ class HomeView(View):
             original_url = form.cleaned_data['original_url']
         # original_url = request.POST.get('original_url')
         #code to generate the shortened URL using shrtco.de API
-            shortened_url = ShortenURL.objects.create(original_url=original_url, short_key="abc123")
+            shortened_url = ShortenURL.objects.create(original_url=original_url, short_key="ghi789")
             shortened_url.generate_qr_code()
             return redirect('home')
         

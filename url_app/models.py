@@ -1,4 +1,6 @@
 import qrcode
+import os
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.files import File
@@ -26,7 +28,12 @@ class ShortenURL(models.Model):
         
         img = qr.make_image(fill_color="black", back_color="white")
         
-        img_path = f'qrcodes/{self.short_key}.png'
-        img.save(img_path, 'PNG')
+        img_name = f'{self.short_key}.png'
+        img_path = os.path.join('qrcodes', img_name)
+        img_full_path = os.path.join(settings.MEDIA_ROOT, img_path)
+        # img_path = f'qrcodes/{self.short_key}.png'
+        # img_path = f'{self.short_key}.png'
+        # img.save(img_path, 'PNG')
+        img.save(img_full_path, 'PNG')
         self.qr_code.name = img_path
         self.save()

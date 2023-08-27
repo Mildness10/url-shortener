@@ -2,6 +2,11 @@ from django.shortcuts import render, redirect
 from django.views import View
 from .models import ShortenURL
 from .forms import URLSubmissionForm
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
+from .forms import CustomUserCreationForm
+from django.urls import reverse_lazy
+from django.views.generic.edit import FormView
 
 
 class HomeView(View):
@@ -24,4 +29,13 @@ class HomeView(View):
         
         shortened_urls = ShortenURL.objects.all()
         return render(request, self.template_name, {'form':form, 'shortened_urls':shortened_urls})
-        
+
+class SignUpView(FormView):
+    template_name = 'signup.html'
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')
+    
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return super().form_valid(form)

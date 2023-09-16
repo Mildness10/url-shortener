@@ -6,6 +6,7 @@ from .models import User
 class URLSubmissionForm(forms.Form):
     original_url = forms.URLField(label='Enter URL', required=True, widget=forms.URLInput(attrs={'class': 'form-control'}))
 
+#custom form for user reg
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User

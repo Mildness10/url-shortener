@@ -4,6 +4,7 @@
 
 {% block content %}
     <h2>Sign Up</h2>
+    <p>Great to have you here. Sign up to continue</p>
     <form method="post">
         {% csrf_token %}
         {{ form|crispy }}

@@ -11,10 +11,13 @@ from django.views.generic.edit import FormView
 
 class HomeView(View):
     template_name = 'home.html'
+    login_url = '/login/'
+    redirect_field_name = 'url_app/home.html'
     
     def get(self, request):
         form = URLSubmissionForm()
-        shortened_urls = ShortenURL.objects.all()
+        shortened_urls = ShortenURL.objects.filter(user=request.user)
+        # shortened_urls = ShortenURL.objects.all()
         return render(request, self.template_name, {'form':form, 'shortened_urls':shortened_urls})
     
     def post(self, request):

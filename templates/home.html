@@ -17,7 +17,28 @@ crispy_forms_tags %} {% block content %}
 <button type="submit">Shorten</button>-->
 </form>
 
-<h2>Shortened URLs:</h2>
+{% if shortened_urls %}
+    <h3>Your Shortened URLs:</h3>
+    <ul>
+        {% for url in shortened_urls %}
+        <li>
+          <a href="{{ url.short_url }}" target="_blank">{{ url.short_url }}</a> - Original: {{ url.original_url }}
+          <br>
+          <img src="{{ url.qr_code.url }}" alt="QR Code for {{ url.short_url }}">
+        </li>
+          {% comment %} <li>{{ url.short_url }} - Original: {{ url.original_url }}</li>
+          <li>
+            {% if url.qr_code %}
+              <img src="{{ url.qr_code.url }}" alt="QR Code" />
+              {% else %}
+              <p>image doesn't exist</p>
+            {% endif %}
+          </li> {% endcomment %}
+      {% endfor %}
+    </ul>
+{% endif %}
+
+{% comment %} <h2>Shortened URLs:</h2>
 <ul>
   {% for url in shortened_urls %}
   <li>
@@ -29,5 +50,5 @@ crispy_forms_tags %} {% block content %}
     {% endif %}
   </li>
   {% endfor %}
-</ul>
+</ul> {% endcomment %}
 {% endblock content %}

@@ -7,6 +7,7 @@ from django.contrib.auth import login
 from .forms import CustomUserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic.edit import FormView
+from .services import URLShortenerService
 
 
 class HomeView(View):
@@ -24,13 +25,20 @@ class HomeView(View):
         form = URLSubmissionForm(request.POST)
         if form.is_valid():
             original_url = form.cleaned_data['original_url']
+            shortened_url = URLShortenerService.shorten_url(original_url)
+            
+            if shortened_url:
+                shortened_url_instance = ShortenURL.objects.create(original_url=original_url, short_url=shortened_url, user=request.user)
+                shortened_url_instance.generate_qr_code()
+                return redirect('home')
         # original_url = request.POST.get('original_url')
         #code to generate the shortened URL using shrtco.de API
-            shortened_url = ShortenURL.objects.create(original_url=original_url, short_key="ghi789")
-            shortened_url.generate_qr_code()
-            return redirect('home')
+        #     shortened_url = ShortenURL.objects.create(original_url=original_url, short_key="ghi789")
+        #     shortened_url.generate_qr_code()
+        #     return redirect('home')
         
-        shortened_urls = ShortenURL.objects.all()
+        # shortened_urls = ShortenURL.objects.all()
+        shortened_urls = ShortenURL.objects.filter(user=request.user)
         return render(request, self.template_name, {'form':form, 'shortened_urls':shortened_urls})
 
 class SignUpView(FormView):

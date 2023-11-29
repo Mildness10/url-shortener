@@ -1,54 +1,25 @@
 {% extends 'base.html' %} {% load crispy_forms_filters %} {% load
 crispy_forms_tags %} {% block content %}
-<h1>URL Shortener</h1>
-{% comment %} <br /> {% endcomment %}
-<a href="{% url 'logout' %}">Logout</a>
+<h1>SpeedyShrink</h1>
+<a href="{% url 'logout' %}" class="logout-btn">Logout</a>
 <br />
 <br/>
-{% comment %}
-<p></p>
-{% endcomment %}
 
 <form method="post">
   {% csrf_token %} {{ form|crispy }}
   <button type="submit" class="btn btn-primary">Shorten</button>
-  <!--<label for="original_url">Enter URL:</label>
-<input type="url" name="original_url" required />
-<button type="submit">Shorten</button>-->
 </form>
 
 {% if shortened_urls %}
     <h3>Your Shortened URLs:</h3>
-    <ul>
+    <ul class="shortened_urls">
         {% for url in shortened_urls %}
         <li>
           <a href="{{ url.short_url }}" target="_blank">{{ url.short_url }}</a> - Original: {{ url.original_url }}
           <br>
           <img src="{{ url.qr_code.url }}" alt="QR Code for {{ url.short_url }}">
         </li>
-          {% comment %} <li>{{ url.short_url }} - Original: {{ url.original_url }}</li>
-          <li>
-            {% if url.qr_code %}
-              <img src="{{ url.qr_code.url }}" alt="QR Code" />
-              {% else %}
-              <p>image doesn't exist</p>
-            {% endif %}
-          </li> {% endcomment %}
       {% endfor %}
     </ul>
 {% endif %}
-
-{% comment %} <h2>Shortened URLs:</h2>
-<ul>
-  {% for url in shortened_urls %}
-  <li>
-    <a href="{{ url.original_url }}">{{ url.original_url }}</a>
-    (<a href="{{ url.short_key }}">Short Link</a>) {% if url.qr_code %}
-    <img src="{{ url.qr_code.url }}" alt="QR Code" />
-    {% else %}
-    <p>image doesn't exist</p>
-    {% endif %}
-  </li>
-  {% endfor %}
-</ul> {% endcomment %}
 {% endblock content %}

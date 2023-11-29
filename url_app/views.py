@@ -17,8 +17,7 @@ class HomeView(View):
     
     def get(self, request):
         form = URLSubmissionForm()
-        shortened_urls = ShortenURL.objects.filter(user=request.user)
-        # shortened_urls = ShortenURL.objects.all()
+        shortened_urls = ShortenURL.objects.filter(user=request.user) if request.user.is_authenticated else []
         return render(request, self.template_name, {'form':form, 'shortened_urls':shortened_urls})
     
     def post(self, request):
@@ -31,14 +30,7 @@ class HomeView(View):
                 shortened_url_instance = ShortenURL.objects.create(original_url=original_url, short_url=shortened_url, user=request.user)
                 shortened_url_instance.generate_qr_code()
                 return redirect('home')
-        # original_url = request.POST.get('original_url')
-        #code to generate the shortened URL using shrtco.de API
-        #     shortened_url = ShortenURL.objects.create(original_url=original_url, short_key="ghi789")
-        #     shortened_url.generate_qr_code()
-        #     return redirect('home')
-        
-        # shortened_urls = ShortenURL.objects.all()
-        shortened_urls = ShortenURL.objects.filter(user=request.user)
+        shortened_urls = ShortenURL.objects.filter(user=request.user) if request.user.is_authenticated else []
         return render(request, self.template_name, {'form':form, 'shortened_urls':shortened_urls})
 
 class SignUpView(FormView):
